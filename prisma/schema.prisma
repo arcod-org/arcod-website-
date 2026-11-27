@@ -1,0 +1,68 @@
+generator client {
+  provider   = "prisma-client-js"
+  engineType = "client"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL") // Neon pooled connection (app)
+  directUrl = env("DIRECT_URL")   // Neon direct connection (migrations)
+}
+
+enum PublishStatus {
+  DRAFT      // hidden from the public site
+  PUBLISHED  // visible once publishAt has passed (scheduled if publishAt is in the future)
+}
+
+enum MediaType {
+  PHOTO
+  VIDEO   // uploaded video file
+  YOUTUBE // YouTube link (recommended for long videos)
+}
+
+model Media {
+  id          String        @id @default(cuid())
+  title       String
+  caption     String        @default("")
+  album       String        @default("General")
+  type        MediaType     @default(PHOTO)
+  url         String        // public file URL (Firebase Storage) or YouTube URL
+  storagePath String?       // Firebase Storage path, used to delete the file
+  status      PublishStatus @default(PUBLISHED)
+  publishAt   DateTime      @default(now())
+  featured    Boolean       @default(false) // show on the homepage gallery strip
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+
+  @@index([status, publishAt])
+  @@index([album])
+}
+
+model Event {
+  id               String        @id @default(cuid())
+  slug             String        @unique
+  title            String
+  category         String        @default("Community")
+  summary          String        @default("")
+  description      String        @default("")
+  venue            String        @default("")
+  startsAt         DateTime      // event date + time (IST, stored as UTC)
+  coverUrl         String?
+  registrationLink String?
+  status           PublishStatus @default(PUBLISHED)
+  publishAt        DateTime      @default(now()) // when the event appears on the site
+  createdAt        DateTime      @default(now())
+  updatedAt        DateTime      @updatedAt
+
+  @@index([status, publishAt, startsAt])
+}
+
+model ContactMessage {
+  id        String   @id @default(cuid())
+  name      String
+  contact   String
+  interest  String
+  message   String
+  handled   Boolean  @default(false)
+  createdAt DateTime @default(now())
+}

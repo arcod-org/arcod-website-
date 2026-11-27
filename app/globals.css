@@ -1,0 +1,58 @@
+@import "tailwindcss";
+
+@theme {
+  --color-forest: #12372E;
+  --color-night: #0A231D;
+  --color-gold: #F2A93B;
+  --color-gold-light: #F7BC5C;
+  --color-paper: #FBFAF6;
+  --color-sand: #EFE9DA;
+  --color-sage: #D6E3DC;
+  --color-mist: #B9CCC2;
+  --color-ink: #1E2B26;
+  --color-body: #3E4E47;
+  --color-muted: #4A5A53;
+  --color-amber: #9A5B00;
+  --color-line: #E4E0D4;
+  --color-leaf: #3F7A5A;
+  --color-harvest: #C9822A;
+  --color-clay: #8C4B32;
+  --color-river: #2E5E6E;
+  --font-display: "Bricolage Grotesque Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Inter Variable", ui-sans-serif, system-ui, sans-serif;
+}
+
+@layer base {
+  html { scroll-behavior: smooth; }
+  body { @apply bg-paper text-ink font-sans antialiased; }
+  h1, h2, h3, .font-display { font-family: var(--font-display); letter-spacing: -0.02em; }
+  :focus-visible { outline: 3px solid var(--color-gold); outline-offset: 3px; }
+}
+
+@utility wrap { @apply mx-auto w-full max-w-[1240px] px-5 sm:px-8 lg:px-12; }
+@utility eyebrow { @apply text-[13px] font-semibold uppercase tracking-[0.14em] text-amber; }
+@utility h-section { @apply font-display text-[clamp(34px,4vw,52px)] font-extrabold leading-[1.05]; }
+@utility btn { @apply inline-flex min-h-12 items-center justify-center gap-2.5 rounded-full px-6 text-[15px] font-semibold transition duration-300 hover:-translate-y-0.5; }
+@utility btn-gold { @apply btn bg-gold text-night hover:bg-gold-light hover:shadow-[0_10px_30px_rgba(242,169,59,.35)]; }
+@utility btn-dark { @apply btn bg-forest text-white hover:bg-night; }
+@utility btn-ghost { @apply btn text-white ring-[1.5px] ring-white/50 ring-inset hover:ring-white; }
+@utility btn-line { @apply btn text-forest ring-[1.5px] ring-[#CBD8D0] ring-inset hover:ring-forest; }
+@utility card { @apply overflow-hidden rounded-[20px] bg-white shadow-[0_1px_0_rgba(18,55,46,.08),0_12px_32px_-18px_rgba(18,55,46,.25)] transition duration-300 hover:-translate-y-1.5 hover:shadow-[0_1px_0_rgba(18,55,46,.08),0_28px_48px_-22px_rgba(18,55,46,.4)]; }
+@utility zoom {
+  & img { transition: transform .9s cubic-bezier(.2,.7,.2,1); }
+  &:hover img { transform: scale(1.05); }
+}
+@utility chip { @apply min-h-11 rounded-full border-[1.5px] px-5 text-sm font-semibold transition; }
+@utility input { @apply min-h-12 w-full rounded-xl border-[1.5px] border-[#CBD8D0] bg-white px-4 text-base text-ink outline-none focus:border-forest focus:ring-4 focus:ring-forest/10; }
+@utility label { @apply text-sm font-semibold text-forest; }
+
+@keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+.marquee { animation: marquee 45s linear infinite; }
+.marquee:hover { animation-play-state: paused; }
+
+@keyframes pulse-ring { 0%,100% { box-shadow: 0 0 0 0 rgba(242,169,59,.6); } 50% { box-shadow: 0 0 0 8px rgba(242,169,59,0); } }
+.live-dot { animation: pulse-ring 2s infinite; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; scroll-behavior: auto !important; }
+}

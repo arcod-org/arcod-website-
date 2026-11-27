@@ -1,0 +1,40 @@
+# Firebase App Hosting config — https://firebase.google.com/docs/app-hosting/configure
+runConfig:
+  minInstances: 0     # scale to zero when idle (keeps cost ~₹0)
+  maxInstances: 2     # hard cap so a traffic spike can't run up the bill
+  concurrency: 80
+  cpu: 1
+  memoryMiB: 512
+
+scripts:
+  buildCommand: npm run build:apphosting   # generates Prisma client, runs migrations, builds Next.js
+
+env:
+  # ── Secrets (stored in Cloud Secret Manager, never in git) ──
+  # Create with:  firebase apphosting:secrets:set DATABASE_URL
+  - variable: DATABASE_URL
+    secret: DATABASE_URL
+    availability: [BUILD, RUNTIME]
+  - variable: DIRECT_URL
+    secret: DIRECT_URL
+    availability: [BUILD]
+
+  # ── Public Firebase web config (safe to be public; protected by Auth + Storage rules) ──
+  - variable: NEXT_PUBLIC_FIREBASE_API_KEY
+    value: "REPLACE_ME"
+    availability: [BUILD, RUNTIME]
+  - variable: NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN
+    value: "arcod-website.firebaseapp.com"
+    availability: [BUILD, RUNTIME]
+  - variable: NEXT_PUBLIC_FIREBASE_PROJECT_ID
+    value: "arcod-website"
+    availability: [BUILD, RUNTIME]
+  - variable: NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET
+    value: "arcod-website.firebasestorage.app"
+    availability: [BUILD, RUNTIME]
+  - variable: NEXT_PUBLIC_FIREBASE_APP_ID
+    value: "REPLACE_ME"
+    availability: [BUILD, RUNTIME]
+  - variable: NEXT_PUBLIC_SITE_URL
+    value: "https://arcod.in"
+    availability: [BUILD, RUNTIME]
